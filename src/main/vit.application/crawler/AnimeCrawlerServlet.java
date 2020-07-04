@@ -17,6 +17,7 @@ import constance.WebConstance;
 import crawler.animehay.AnimeMoizCrawler;
 import crawler.animehay.AnimeMoizDetailsCrawler;
 import crawler.helper.CrawlingHelper;
+import crawler.helper.ParsingResult;
 import model.Anime;
 import model.AnimeMoiz;
 import utils.HtmlNormalization;
@@ -50,12 +51,20 @@ public class AnimeCrawlerServlet extends HttpServlet {
 //            break;
 //        }
         // crawl AnimeMoiz
-        String content = HtmlNormalization.refineHtml(CrawlingHelper.normalizeHTML(WebConstance.VIETANIME_PAGE));
+        String link = WebConstance.VIETANIME_PAGE;
+        String content = "";
+        ParsingResult<AnimeMoiz> result;
         AnimeMoizCrawler crawler = new AnimeMoizCrawler();
         AnimeMoizDetailsCrawler detailsCrawler = new AnimeMoizDetailsCrawler();
-        detailsCrawler.parseXMLToAnimeObject(content, new AnimeMoiz());
-        while (true) {
-            Collection<AnimeMoiz> animes = crawler.parseXMLToAnimeObject(content);
+
+        for (int i = 2; i <= 21; i++) {
+            content = HtmlNormalization.refineHtml(CrawlingHelper.normalizeHTML(link));
+            result = crawler.parseXMLToAnimeObject(content);
+            Collection<AnimeMoiz> animes = result.getData();
+            if (!animes.isEmpty()) {
+                // save database
+
+            }
             for (AnimeMoiz anime : animes) {
                 content = HtmlNormalization.refineHtml(CrawlingHelper.normalizeHTML(anime.getLink()));
                 Pattern pattern = Pattern.compile("<div class=\"movie-meta-info\">(.+?)</div>");
@@ -66,14 +75,15 @@ public class AnimeCrawlerServlet extends HttpServlet {
                 content = content.replaceAll(exp, "").replaceAll("</a>", "");
                 exp = "<div class=\"clear\">";
                 content = content.replaceAll(exp, "");
-                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("C:\\Users\\vitpt\\Downloads\\study\\semester_8\\prx\\anime\\anime.html"));
-                bufferedWriter.write(content);
-                bufferedWriter.close();
+                //ghi file xml
+//                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("C:\\Users\\vitpt\\Downloads\\study\\semester_8\\prx\\anime\\anime.html"));
+//                bufferedWriter.write(content);
+//                bufferedWriter.close();
                 detailsCrawler.parseXMLToAnimeObject(content, anime);
                 System.out.println(anime);
                 System.out.println("*".repeat(10));
             }
-            break;
+            link = "http://www.phimmoiz.com/the-loai/phim-hoat-hinh/page-" + i + ".html";
         }
     }
 }

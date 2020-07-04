@@ -3,6 +3,7 @@ package crawler.animehay;
 import checker.ElementChecker;
 import constance.WebConstance;
 import crawler.helper.CrawlingHelper;
+import crawler.helper.ParsingResult;
 import lombok.SneakyThrows;
 import model.Anime;
 import model.AnimeMoiz;
@@ -19,7 +20,8 @@ import java.util.Collection;
 public class AnimeMoizCrawler {
 
     @SneakyThrows
-    public Collection<AnimeMoiz> parseXMLToAnimeObject(String document) {
+    public ParsingResult<AnimeMoiz> parseXMLToAnimeObject(String document) {
+        ParsingResult<AnimeMoiz> result = new ParsingResult<>();
         Collection<AnimeMoiz> animes = new ArrayList<>();
 
         XMLEventReader eventReader = CrawlingHelper.parseStringToXMLEventReader(document);
@@ -30,15 +32,10 @@ public class AnimeMoizCrawler {
 
         boolean isLink = false;
         boolean isImage = false;
-//        boolean isViewNum = false;
         boolean isName = false;
-//        boolean isYear = false;
-
         String link = "";
         String image = "";
-//        int viewNum = 0;
         String name = "";
-//        String year = "";
 
         while (eventReader.hasNext()) {
             event = eventReader.nextEvent();
@@ -53,16 +50,13 @@ public class AnimeMoizCrawler {
                         link = WebConstance.ANIMEMOIZ + startElement.getAttributeByName(new QName("href")).getValue();
                         isLink = false;
                         isImage = true;
-                        System.out.println("LINK: " + link);
                     }
                     if (isImage && ElementChecker.isElementWith(startElement, "div", "class", "movie-thumbnail")) {
                         image = startElement.getAttributeByName(new QName("style")).getValue()
-                                .replace("background:url(","")
-                                .replace("); background-size: cover;","");
+                                .replace("background:url(", "")
+                                .replace("); background-size: cover;", "");
                         isImage = false;
-//                        isViewNum = true;
                         isName = true;
-                        System.out.println(image);
                     }
 //                    if (isViewNum && ElementChecker.isElementWith(startElement, "span", "class", "viewed_online")) {
 //                        Characters characters = eventReader.nextEvent().asCharacters();
@@ -77,16 +71,7 @@ public class AnimeMoizCrawler {
                         isStart = false;
                         AnimeMoiz anime = new AnimeMoiz(name, image, link);
                         animes.add(anime);
-//                        isYear = true;
                     }
-//                    if (isYear && ElementChecker.isElementWith(startElement, "span", "class", "Year")) {
-//                        Characters characters = eventReader.nextEvent().asCharacters();
-//                        year = characters.getData().trim();
-//                        isYear = false;
-//                        isStart = false;
-//                        Anime anime = new Anime(name, image, link, viewNum, year);
-//                        animes.add(anime);
-//                    }
                 }
             }
             if (isFound && event.isStartElement()) {
@@ -97,6 +82,7 @@ public class AnimeMoizCrawler {
                 }
             }
         }
-        return animes;
+        result.setData(animes);
+        return result;
     }
 }
