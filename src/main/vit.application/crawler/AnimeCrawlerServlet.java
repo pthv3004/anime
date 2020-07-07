@@ -4,8 +4,6 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,8 +16,8 @@ import crawler.animehay.AnimeMoizCrawler;
 import crawler.animehay.AnimeMoizDetailsCrawler;
 import crawler.helper.CrawlingHelper;
 import crawler.helper.ParsingResult;
-import model.Anime;
-import model.AnimeMoiz;
+import jpa.AnimeJPA;
+import model.AnimeEntity;
 import utils.HtmlNormalization;
 
 @WebServlet(name = "CrawlerServlet", urlPatterns = {"/CrawlerServlet"})
@@ -53,33 +51,25 @@ public class AnimeCrawlerServlet extends HttpServlet {
         // crawl AnimeMoiz
         String link = WebConstance.VIETANIME_PAGE;
         String content = "";
-        ParsingResult<AnimeMoiz> result;
+        ParsingResult<AnimeEntity> result;
         AnimeMoizCrawler crawler = new AnimeMoizCrawler();
         AnimeMoizDetailsCrawler detailsCrawler = new AnimeMoizDetailsCrawler();
 
         for (int i = 2; i <= 21; i++) {
             content = HtmlNormalization.refineHtml(CrawlingHelper.normalizeHTML(link));
             result = crawler.parseXMLToAnimeObject(content);
-            Collection<AnimeMoiz> animes = result.getData();
-            if (!animes.isEmpty()) {
-                // save database
-
-            }
-            for (AnimeMoiz anime : animes) {
-                content = HtmlNormalization.refineHtml(CrawlingHelper.normalizeHTML(anime.getLink()));
-                Pattern pattern = Pattern.compile("<div class=\"movie-meta-info\">(.+?)</div>");
-                Matcher matcher = pattern.matcher(content);
-                matcher.find();
-                content = matcher.group(1);
-                String exp = "<a.*?>";
-                content = content.replaceAll(exp, "").replaceAll("</a>", "");
-                exp = "<div class=\"clear\">";
-                content = content.replaceAll(exp, "");
+            Collection<AnimeEntity> animes = result.getData();
+            for (AnimeEntity anime : animes) {
+                content = HtmlNormalization.refineDetailHtml(CrawlingHelper.normalizeHTML(anime.getAnimeLink()));
                 //ghi file xml
-//                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("C:\\Users\\vitpt\\Downloads\\study\\semester_8\\prx\\anime\\anime.html"));
-//                bufferedWriter.write(content);
-//                bufferedWriter.close();
+                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("C:\\Users\\vitpt\\Downloads\\study\\semester_8\\prx\\anime\\anime.html"));
+                bufferedWriter.write(content);
+                bufferedWriter.close();
                 detailsCrawler.parseXMLToAnimeObject(content, anime);
+                if (anime != null){
+                    AnimeJPA jpa = new AnimeJPA();
+                    jpa.persistAnime(anime);
+                }
                 System.out.println(anime);
                 System.out.println("*".repeat(10));
             }

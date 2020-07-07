@@ -13,6 +13,16 @@
         <element id="directory" name="classes">
           <element id="module-output" name="anime" />
         </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: org.eclipse.persistence:org.eclipse.persistence.jpa:2.7.3" />
+          <element id="library" level="project" name="Maven: org.eclipse.persistence:javax.persistence:2.2.1" />
+          <element id="library" level="project" name="Maven: org.eclipse.persistence:org.eclipse.persistence.asm:2.7.3" />
+          <element id="library" level="project" name="Maven: org.eclipse.persistence:org.eclipse.persistence.antlr:2.7.3" />
+          <element id="library" level="project" name="Maven: javax.json:javax.json-api:1.1.2" />
+          <element id="library" level="project" name="Maven: org.eclipse.persistence:org.eclipse.persistence.jpa.jpql:2.7.3" />
+          <element id="library" level="project" name="Maven: org.eclipse.persistence:org.eclipse.persistence.core:2.7.3" />
+          <element id="library" level="project" name="Maven: com.microsoft.sqlserver:sqljdbc4:4.0" />
+        </element>
       </element>
       <element id="directory" name="META-INF">
         <element id="file-copy" path="$PROJECT_DIR$/target/anime/META-INF/MANIFEST.MF" />

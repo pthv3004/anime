@@ -5,13 +5,11 @@ import constance.WebConstance;
 import crawler.helper.CrawlingHelper;
 import crawler.helper.ParsingResult;
 import lombok.SneakyThrows;
-import model.Anime;
-import model.AnimeMoiz;
+import model.AnimeEntity;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.events.Characters;
-import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 import java.util.ArrayList;
@@ -20,9 +18,9 @@ import java.util.Collection;
 public class AnimeMoizCrawler {
 
     @SneakyThrows
-    public ParsingResult<AnimeMoiz> parseXMLToAnimeObject(String document) {
-        ParsingResult<AnimeMoiz> result = new ParsingResult<>();
-        Collection<AnimeMoiz> animes = new ArrayList<>();
+    public ParsingResult<AnimeEntity> parseXMLToAnimeObject(String document) {
+        ParsingResult<AnimeEntity> result = new ParsingResult<>();
+        Collection<AnimeEntity> animes = new ArrayList<>();
 
         XMLEventReader eventReader = CrawlingHelper.parseStringToXMLEventReader(document);
         XMLEvent event;
@@ -69,7 +67,7 @@ public class AnimeMoizCrawler {
                         name = characters.getData().trim();
                         isName = false;
                         isStart = false;
-                        AnimeMoiz anime = new AnimeMoiz(name, image, link);
+                        AnimeEntity anime = new AnimeEntity(name, image, link);
                         animes.add(anime);
                     }
                 }

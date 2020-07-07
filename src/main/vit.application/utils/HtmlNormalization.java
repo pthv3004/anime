@@ -13,11 +13,20 @@ public class HtmlNormalization {
         htmlString = xmlSyntaxChecker.check(htmlString);
         return htmlString;
     }
-    public static String refineDetailHtml(String htmlString){
+
+    public static String refineDetailHtml(String htmlString) {
         XMLSyntaxChecker xmlSyntaxChecker = new XMLSyntaxChecker();
-        htmlString = getBody(htmlString);
         htmlString = removeMiscellAneousTags(htmlString);
         htmlString = xmlSyntaxChecker.check(htmlString);
+        Pattern pattern = Pattern.compile("<div class=\"movie-meta-info\">(.+?)</div>");
+        Matcher matcher = pattern.matcher(htmlString);
+        matcher.find();
+        htmlString = matcher.group(1);
+        String exp = "<a.*?>";
+        htmlString = htmlString.replaceAll(exp, "").replaceAll("</a>", "");
+        exp = "<div class=\"clear\">";
+        htmlString = htmlString.replaceAll(exp, "");
+
         return htmlString;
     }
 
