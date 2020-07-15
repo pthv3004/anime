@@ -2,9 +2,11 @@ package jpa;
 
 import model.anime47.CategoryEntity;
 import model.anime47.MovieEntity;
+import model.phimmoiz.AnimeEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -86,7 +88,7 @@ public class AnimeJPA implements Serializable {
 
     public List<MovieEntity> searchByLikeName(String searchValue) {
         EntityManager em = emf.createEntityManager();
-        List<MovieEntity> movieEntities = null;
+        List<MovieEntity> movieEntities = new ArrayList<>();
         try {
             String jpql = "SELECT m from MovieEntity m "
                     + "where m.movieName LIKE :searchValue "
@@ -99,7 +101,8 @@ public class AnimeJPA implements Serializable {
         }
         return movieEntities;
     }
-    public  List<MovieEntity> searchByLikeSeason(String searchValue){
+
+    public List<MovieEntity> searchByLikeSeason(String searchValue) {
         EntityManager em = emf.createEntityManager();
         List<MovieEntity> movieEntities = null;
         try {
@@ -108,8 +111,8 @@ public class AnimeJPA implements Serializable {
                     + "order by m.viewNum desc ";
             Query query = em.createQuery(jpql);
             query.setParameter("searchValue", "%" + searchValue + "%");
-            movieEntities = query.setMaxResults(30).getResultList();
-        }finally {
+            movieEntities = query.setMaxResults(15).getResultList();
+        } finally {
             em.close();
         }
         return movieEntities;
@@ -129,19 +132,51 @@ public class AnimeJPA implements Serializable {
         }
         return listCateId;
     }
-    public  List<Integer> getListMovieIdByCateId(int cateId){
+
+    public List<Integer> getListMovieIdByCateId(int cateId) {
         EntityManager em = emf.createEntityManager();
         List<Integer> listMovieId = null;
         try {
             String jpql = "Select md.movieEntity.movieId from MovieDetailedEntity md " +
                     "where md.categoryEntity.cateId = :cateId";
             Query query = em.createQuery(jpql);
-            query.setParameter("cateId",cateId);
+            query.setParameter("cateId", cateId);
             listMovieId = query.setMaxResults(6).getResultList();
-        }finally {
+        } finally {
             em.close();
         }
         return listMovieId;
+    }
+
+    public List<MovieEntity> getListStatistic() {
+        EntityManager em = emf.createEntityManager();
+        List<MovieEntity> statisticDTOList = new ArrayList<>();
+        try {
+            String jpql = "select c.categoryName, m.season, sum(m.viewNum) " +
+                    "from MovieDetailedEntity md " +
+                    "inner join CategoryEntity c on c.cateId = md.categoryEntity.cateId " +
+                    "inner join MovieEntity m on m.movieId = md.movieEntity.movieId " +
+                    "group by c.categoryName, m.season " +
+                    "order by sum(m.viewNum)desc ";
+            Query query = em.createQuery(jpql);
+            statisticDTOList = query.setMaxResults(30).getResultList();
+        } finally {
+            em.close();
+        }
+        return statisticDTOList;
+    }
+
+    public void persistAnime(AnimeEntity anime) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(anime);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught");
+        } finally {
+            em.close();
+        }
     }
 //    public List<CategoryEntity> getCategoriesByMovieId(String )
 }

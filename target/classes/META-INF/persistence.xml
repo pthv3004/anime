@@ -21,6 +21,7 @@
         <class>model.anime47.CategoryEntity</class>
         <class>model.anime47.MovieEntity</class>
         <class>model.anime47.MovieDetailedEntity</class>
+        <class>model.phimmoiz.AnimeEntity</class>
         <properties>
             <property name="eclipselink.jdbc.url" value="jdbc:sqlserver://localhost;database=WibuLover"/>
             <property name="eclipselink.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>

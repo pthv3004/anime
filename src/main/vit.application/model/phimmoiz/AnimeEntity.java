@@ -6,6 +6,9 @@ import java.util.Objects;
 @Entity
 @Table(name = "Anime", schema = "dbo", catalog = "WibuLover")
 public class AnimeEntity {
+    @Id
+    @Column(name = "animeId", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int animeId;
     private String animeName;
     private String image;
@@ -25,9 +28,7 @@ public class AnimeEntity {
     }
 
 
-    @Id
-    @Column(name = "animeId", nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     public int getAnimeId() {
         return animeId;
     }
@@ -135,5 +136,20 @@ public class AnimeEntity {
     @Override
     public int hashCode() {
         return Objects.hash(animeId, animeName, image, animeLink, status, iMdb, genreName, actorName, year);
+    }
+
+    @Override
+    public String toString() {
+        return "AnimeEntity{" +
+                "animeId=" + animeId +
+                ", animeName='" + animeName + '\'' +
+                ", image='" + image + '\'' +
+                ", animeLink='" + animeLink + '\'' +
+                ", status='" + status + '\'' +
+                ", iMdb=" + iMdb +
+                ", genreName='" + genreName + '\'' +
+                ", actorName='" + actorName + '\'' +
+                ", year='" + year + '\'' +
+                '}';
     }
 }

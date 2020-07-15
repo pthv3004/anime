@@ -75,10 +75,29 @@
 
                 </table>
             </a>
+            <c:set var="listStatistic" value="${sessionScope.STATISTICS}"/>
+            <table class="table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Season</th>
+                    <th scope="col">VIEW </th>
+                </tr>
+                </thead>
+                <c:forEach var="statistic"  varStatus="sCounter" items="${listStatistic}">
+                    <tbody>
+                    <tr>
+                        <th scope="row">${sCounter.count}</th>
+                        <td>${statistic[0]}</td>
+                        <td>${statistic[1]}</td>
+                        <td>${statistic[2]}</td>
+                    </tr>
+                    </tbody>
+                </c:forEach>
+            </table>
         </div>
     </div>
 </div>
-
-
 </body>
 </html>

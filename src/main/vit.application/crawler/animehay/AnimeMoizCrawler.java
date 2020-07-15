@@ -5,6 +5,7 @@ import constance.WebConstance;
 import crawler.helper.CrawlingHelper;
 import crawler.helper.ParsingResult;
 import lombok.SneakyThrows;
+import model.anime47.MovieEntity;
 import model.phimmoiz.AnimeEntity;
 
 import javax.xml.namespace.QName;
@@ -18,9 +19,8 @@ import java.util.Collection;
 public class AnimeMoizCrawler {
 
     @SneakyThrows
-    public ParsingResult<AnimeEntity> parseXMLToAnimeObject(String document) {
-        ParsingResult<AnimeEntity> result = new ParsingResult<>();
-        Collection<AnimeEntity> animes = new ArrayList<>();
+    public Collection<MovieEntity> parseXMLToAnimeObject(String document) {
+        Collection<MovieEntity> movieEntities = new ArrayList<>();
 
         XMLEventReader eventReader = CrawlingHelper.parseStringToXMLEventReader(document);
         XMLEvent event;
@@ -67,8 +67,8 @@ public class AnimeMoizCrawler {
                         name = characters.getData().trim();
                         isName = false;
                         isStart = false;
-                        AnimeEntity anime = new AnimeEntity(name, image, link);
-                        animes.add(anime);
+                        MovieEntity movieEntity = new MovieEntity(name,link,image);
+                        movieEntities.add(movieEntity);
                     }
                 }
             }
@@ -80,7 +80,6 @@ public class AnimeMoizCrawler {
                 }
             }
         }
-        result.setData(animes);
-        return result;
+        return movieEntities;
     }
 }

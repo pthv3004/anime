@@ -4,12 +4,13 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Objects;
 
 @Entity
 @Table(name = "MovieDetailed", schema = "dbo", catalog = "WibuLover")
-public class MovieDetailedEntity {
+public class MovieDetailedEntity implements Serializable {
     @Id
     @Column(name = "movieDetailId", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

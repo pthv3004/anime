@@ -51,32 +51,6 @@ public class AnimeCrawlerServlet extends HttpServlet {
             //save Collections animes
         }
 
-        // crawl AnimeMoiz
-//        String link = WebConstance.VIETANIME_PAGE;
-//        String content = "";
-//        ParsingResult<AnimeEntity> result;
-//        AnimeMoizCrawler crawler = new AnimeMoizCrawler();
-//        AnimeMoizDetailsCrawler detailsCrawler = new AnimeMoizDetailsCrawler();
-//
-//        for (int i = 2; i <= 21; i++) {
-//            content = HtmlNormalization.refineHtml(CrawlingHelper.normalizeHTML(link));
-//            result = crawler.parseXMLToAnimeObject(content);
-//            Collection<AnimeEntity> animes = result.getData();
-//            for (AnimeEntity anime : animes) {
-//                content = HtmlNormalization.refineDetailHtml(CrawlingHelper.normalizeHTML(anime.getAnimeLink()));
-//                //ghi file xml
-//                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("C:\\Users\\vitpt\\Downloads\\study\\semester_8\\prx\\anime\\anime.html"));
-//                bufferedWriter.write(content);
-//                bufferedWriter.close();
-//                detailsCrawler.parseXMLToAnimeObject(content, anime);
-//                if (anime != null){
-//                    AnimeJPA jpa = new AnimeJPA();
-//                    jpa.persistAnime(anime);
-//                }
-//                System.out.println(anime);
-//                System.out.println("*".repeat(10));
-//            }
-//            link = "http://www.phimmoiz.com/the-loai/phim-hoat-hinh/page-" + i + ".html";
-//        }
+
     }
 }

@@ -5,28 +5,19 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
 @Entity
 @Table(name = "Category", schema = "dbo", catalog = "WibuLover")
-public class CategoryEntity {
+public class CategoryEntity implements Serializable {
     @Id
     @Column(name = "cateId", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int cateId;
     private String categoryName;
-    @Column(name = "viewNum", nullable = true)
-    private int viewNum;
-
-    public int getViewNum() {
-        return viewNum;
-    }
-
-    public void setViewNum(int viewNum) {
-        this.viewNum += viewNum;
-    }
 
     public CategoryEntity() {
     }

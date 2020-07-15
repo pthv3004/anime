@@ -45,4 +45,20 @@ public class Anime {
         this.image = image;
         this.link = link;
     }
+
+    @Override
+    public String toString() {
+        return "Anime{" +
+                "name='" + name + '\'' +
+                ", image='" + image + '\'' +
+                ", link='" + link + '\'' +
+                ", status='" + status + '\'' +
+                ", commentNum=" + commentNum +
+                ", viewNum=" + viewNum +
+                ", category='" + category + '\'' +
+                ", type='" + type + '\'' +
+                ", season='" + season + '\'' +
+                ", year='" + year + '\'' +
+                '}';
+    }
 }

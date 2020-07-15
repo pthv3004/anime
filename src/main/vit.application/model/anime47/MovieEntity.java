@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "Movie", schema = "dbo", catalog = "WibuLover")
-public class MovieEntity {
+public class MovieEntity implements Serializable {
     @Id
     @Column(name = "movieId", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +27,7 @@ public class MovieEntity {
     private String season;
     private String year;
     private String image;
-    private double iMdb;
+    private float iMdb;
     @Transient
     private String categories;
     @Transient
@@ -47,12 +48,14 @@ public class MovieEntity {
                         (movieDetailedEntities.indexOf(c) == movieDetailedEntities.size() - 1 ? "" : ", "))
                 .reduce("", String::concat);
         //calculate interactPoint
-        if (this.year.matches("\\d+")) {
-            if (this.year.equals("2020") == false) {
-                this.interactPoint = this.viewNum / ((2020 - Integer.parseInt(this.year)) * 360.0);
+        if (year != null) {
+            if (this.year.matches("\\d+")) {
+                if (this.year.equals("2020") == false) {
+                    this.interactPoint = this.viewNum / ((2020 - Integer.parseInt(this.year)) * 360.0);
+                }
+            } else {
+                this.interactPoint = this.viewNum / 360.0;
             }
-        } else {
-            this.interactPoint = this.viewNum / 360.0;
         }
     }
 
@@ -69,6 +72,12 @@ public class MovieEntity {
         this.image = image;
     }
 
+    public MovieEntity(String movieName, String movieLink, String image) {
+        this.movieName = movieName;
+        this.movieLink = movieLink;
+        this.image = image;
+    }
+
     public List<MovieDetailedEntity> getMovieDetailedEntities() {
         return movieDetailedEntities;
     }
@@ -77,7 +86,7 @@ public class MovieEntity {
     }
 
 
-    public MovieEntity(int movieId, String type, String season, String year, Double iMdb, String categories, double interactPoint) {
+    public MovieEntity(int movieId, String type, String season, String year, float iMdb, String categories, double interactPoint) {
         this.movieId = movieId;
         this.type = type;
         this.season = season;
@@ -86,6 +95,7 @@ public class MovieEntity {
         this.categories = categories;
         this.interactPoint = (this.viewNum) / 90.0;
     }
+
 
     @Override
     public String toString() {
@@ -111,7 +121,7 @@ public class MovieEntity {
 
 
     public void setMovieDetail(List<MovieDetailedEntity> movieDetailedEntities) {
-        movieDetailedEntities.stream().forEach(c -> c.getCategoryEntity().setViewNum(this.viewNum));
+        this.movieDetailedEntities = movieDetailedEntities;
     }
 
     public int getMovieId() {
@@ -215,11 +225,11 @@ public class MovieEntity {
 
     @Basic
     @Column(name = "iMDB", nullable = true, precision = 0)
-    public Double getiMdb() {
+    public float getiMdb() {
         return iMdb;
     }
 
-    public void setiMdb(Double iMdb) {
+    public void setiMdb(float iMdb) {
         this.iMdb = iMdb;
     }
 

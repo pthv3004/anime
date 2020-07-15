@@ -21,8 +21,10 @@ public class StatisticServlet extends HttpServlet {
         AnimeJPA animeJPA = new AnimeJPA();
         try {
             List<MovieEntity> movieEntities = animeJPA.searchByLikeSeason(season);
+            List<MovieEntity> statisticDTOList = animeJPA.getListStatistic();
             HttpSession session = req.getSession();
             session.setAttribute("MOVIES",movieEntities);
+            session.setAttribute("STATISTICS",statisticDTOList);
         }finally {
             req.getRequestDispatcher("statisticPage.jsp").forward(req,resp);
         }
