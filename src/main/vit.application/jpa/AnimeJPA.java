@@ -1,56 +1,147 @@
 package jpa;
 
-import model.ActorEntity;
-import model.AnimeEntity;
-import model.GenresEntity;
+import model.anime47.CategoryEntity;
+import model.anime47.MovieEntity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class AnimeJPA implements Serializable {
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("NewPersistenceUnit");
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("WibuLover");
 
-    public void persistAnime(AnimeEntity animeEntity){
+    public void persistMovie(MovieEntity movieEntity) {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.persist(animeEntity);
+            em.persist(movieEntity);
             em.getTransaction().commit();
-        }catch (Exception e){
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE,"exception caught");
-        }finally {
+        } catch (Exception e) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught");
+        } finally {
             em.close();
         }
     }
-    public Collection<AnimeEntity> getAllAnime(){
 
-        return null;
-    }
-    public void persistGenres(GenresEntity genresEntity){
+    public List<CategoryEntity> getCategories() {
         EntityManager em = emf.createEntityManager();
+        List<CategoryEntity> categories = null;
         try {
-            em.getTransaction().begin();
-            em.persist(genresEntity);
-            em.getTransaction().commit();
-        }catch (Exception e){
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE,"exception caught");
+
+            String jpql = "Select c from CategoryEntity c";
+            Query query = em.createQuery(jpql);
+
+            categories = (List<CategoryEntity>) query.getResultList();
+
+        } catch (Exception e) {
+
+        } finally {
+            em.close();
+        }
+        return categories;
+    }
+
+    public List<MovieEntity> getMovies() {
+        EntityManager em = emf.createEntityManager();
+        List<MovieEntity> movieEntities = null;
+        try {
+            String jpql = "Select m from MovieEntity m order by m.viewNum desc";
+            Query query = em.createQuery(jpql);
+            movieEntities = query.setMaxResults(30).getResultList();
+        } finally {
+            em.close();
+        }
+        return movieEntities;
+    }
+
+    public List<String> getImageLink() {
+        EntityManager em = emf.createEntityManager();
+        List<String> imageLinks = null;
+        try {
+            String jpql = "Select m.image from MovieEntity m where m.movieId > 179998";
+            Query query = em.createQuery(jpql);
+            imageLinks = query.getResultList();
+        } finally {
+            em.close();
+        }
+        return imageLinks;
+    }
+
+    public MovieEntity getMovieById(int movieId) {
+        EntityManager em = emf.createEntityManager();
+        MovieEntity movieEntity = null;
+        try {
+            String jpql = "Select m from MovieEntity m " +
+                    "where m.movieId = :movieId";
+            Query query = em.createQuery(jpql);
+            query.setParameter("movieId", movieId);
+            movieEntity = (MovieEntity) query.getSingleResult();
+        } finally {
+            em.close();
+        }
+        return movieEntity;
+    }
+
+    public List<MovieEntity> searchByLikeName(String searchValue) {
+        EntityManager em = emf.createEntityManager();
+        List<MovieEntity> movieEntities = null;
+        try {
+            String jpql = "SELECT m from MovieEntity m "
+                    + "where m.movieName LIKE :searchValue "
+                    + "order by m.movieName ";
+            Query query = em.createQuery(jpql);
+            query.setParameter("searchValue", "%" + searchValue + "%");
+            movieEntities = query.setMaxResults(30).getResultList();
+        } finally {
+            em.close();
+        }
+        return movieEntities;
+    }
+    public  List<MovieEntity> searchByLikeSeason(String searchValue){
+        EntityManager em = emf.createEntityManager();
+        List<MovieEntity> movieEntities = null;
+        try {
+            String jpql = "SELECT m from MovieEntity m "
+                    + "where m.season LIKE :searchValue "
+                    + "order by m.viewNum desc ";
+            Query query = em.createQuery(jpql);
+            query.setParameter("searchValue", "%" + searchValue + "%");
+            movieEntities = query.setMaxResults(30).getResultList();
         }finally {
             em.close();
         }
+        return movieEntities;
     }
-    public void persistActor(ActorEntity actorEntity){
+
+    public int getCateIdByCateName(String cateName) {
         EntityManager em = emf.createEntityManager();
+        int listCateId = 0;
         try {
-            em.getTransaction().begin();
-            em.persist(actorEntity);
-            em.getTransaction().commit();
-        }catch (Exception e){
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE,"exception caught");
+            String jpql = "Select c.cateId from CategoryEntity c " +
+                    "where c.categoryName = :cateName";
+            Query query = em.createQuery(jpql);
+            query.setParameter("cateName", cateName);
+            listCateId = (int) query.getSingleResult();
+        } finally {
+            em.close();
+        }
+        return listCateId;
+    }
+    public  List<Integer> getListMovieIdByCateId(int cateId){
+        EntityManager em = emf.createEntityManager();
+        List<Integer> listMovieId = null;
+        try {
+            String jpql = "Select md.movieEntity.movieId from MovieDetailedEntity md " +
+                    "where md.categoryEntity.cateId = :cateId";
+            Query query = em.createQuery(jpql);
+            query.setParameter("cateId",cateId);
+            listMovieId = query.setMaxResults(6).getResultList();
         }finally {
             em.close();
         }
+        return listMovieId;
     }
+//    public List<CategoryEntity> getCategoriesByMovieId(String )
 }

@@ -17,5 +17,25 @@ C:/Users/vitpt/Downloads/study/semester_8/prx/anime/src/main/vit.application/MET
       <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
       <jdbc-url>jdbc:sqlserver://localhost;database=WibuLover</jdbc-url>
     </data-source>
+    <data-source source="LOCAL" name="WibuLover/EclipseLink" uuid="74944668-3766-435c-a5eb-efb5cd115195">
+      <driver-ref>sqlserver.ms</driver-ref>
+      <synchronize>true</synchronize>
+      <imported>true</imported>
+      <remarks>EclipseLink
+
+C:/Users/vitpt/Downloads/study/semester_8/prx/anime/src/main/webapp/META-INF/persistence.xml</remarks>
+      <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
+      <jdbc-url>jdbc:sqlserver://localhost;database=WibuLover</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="Wibu/EclipseLink" uuid="cf64bd15-c7f5-4e9f-af25-272e70ce6a60">
+      <driver-ref>sqlserver.ms</driver-ref>
+      <synchronize>true</synchronize>
+      <imported>true</imported>
+      <remarks>EclipseLink
+
+C:/Users/vitpt/Downloads/study/semester_8/prx/anime/src/main/webapp/META-INF/persistence.xml</remarks>
+      <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
+      <jdbc-url>jdbc:sqlserver://localhost;database=WibuLover</jdbc-url>
+    </data-source>
   </component>
 </project>

@@ -8,12 +8,19 @@ import javax.xml.stream.events.XMLEvent;
 import checker.ElementChecker;
 import crawler.helper.CrawlingHelper;
 import lombok.SneakyThrows;
-import model.Anime;
+import model.anime47.CategoryEntity;
+import model.anime47.MovieDetailedEntity;
+import model.anime47.MovieEntity;
+import model.test.Anime;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Anime47DetailsCrawler {
 
     @SneakyThrows
-    public void parseXMLToAnimeModel(String document, Anime anime) {
+    public void parseXMLToAnimeModel(String document, MovieEntity movieEntity, List<CategoryEntity> categories) {
         XMLEventReader eventReader = CrawlingHelper.parseStringToXMLEventReader(document);
         XMLEvent event;
 
@@ -37,14 +44,21 @@ public class Anime47DetailsCrawler {
                 if (isStart) {
                     if (isCategory && ElementChecker.isElementWith(startElement, "dd", "class", "movie-dd dd-cat")) {
                         Characters characters = eventReader.nextEvent().asCharacters();
-                        anime.setCategory(characters.getData().trim());
+                        List<MovieDetailedEntity> movieDetailedEntities = Stream.of(characters.getData().trim()
+                                .split(","))
+                                .map(c-> categories.stream()
+                                        .filter(e -> e.getCategoryName().equalsIgnoreCase(c)).findFirst()
+                                        .orElseGet(() -> new CategoryEntity(c)))
+                                .map(c-> new MovieDetailedEntity(movieEntity,c))
+                                .collect(Collectors.toList());
+                        movieEntity.setMovieDetailedEntities(movieDetailedEntities);
                         isCategory = false;
                         isType = true;
                     }
 
                     if (isType && ElementChecker.isElementWith(startElement, "dd", "class", "movie-dd")) {
                         Characters characters = eventReader.nextEvent().asCharacters();
-                        anime.setType(characters.getData().trim());
+                        movieEntity.setType(characters.getData().trim());
                         isType = false;
                         isSeason = true;
                         continue;
@@ -52,7 +66,7 @@ public class Anime47DetailsCrawler {
 
                     if (isSeason && ElementChecker.isElementWith(startElement, "dd", "class", "movie-dd")) {
                         Characters characters = eventReader.nextEvent().asCharacters();
-                        anime.setSeason(characters.getData().trim());
+                        movieEntity.setSeason(characters.getData().trim());
                         isSeason = false;
                         isYear = true;
                         continue;
@@ -60,7 +74,7 @@ public class Anime47DetailsCrawler {
 
                     if (isYear && ElementChecker.isElementWith(startElement, "dd", "class", "movie-dd")) {
                         Characters characters = eventReader.nextEvent().asCharacters();
-                        anime.setYear(characters.getData().trim());
+                        movieEntity.setYear(characters.getData().trim());
                         isYear = false;
                         return;
                     }

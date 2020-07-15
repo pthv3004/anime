@@ -3,7 +3,7 @@ package crawler.animehay;
 import checker.ElementChecker;
 import crawler.helper.CrawlingHelper;
 import lombok.SneakyThrows;
-import model.AnimeEntity;
+import model.phimmoiz.AnimeEntity;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.events.Characters;

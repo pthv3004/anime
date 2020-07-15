@@ -13,13 +13,14 @@ import checker.ElementChecker;
 import constance.WebConstance;
 import crawler.helper.CrawlingHelper;
 import lombok.SneakyThrows;
-import model.Anime;
+import model.anime47.MovieEntity;
+import model.test.Anime;
 
 public class Anime47Crawler {
 
     @SneakyThrows
-    public Collection<Anime> parseXMLToAnimeModel(String document) {
-        Collection<Anime> animes = new ArrayList<>();
+    public Collection<MovieEntity> parseXMLToAnimeModel(String document) {
+        Collection<MovieEntity> movieEntities = new ArrayList<>();
         XMLEventReader eventReader = CrawlingHelper.parseStringToXMLEventReader(document);
         XMLEvent event;
         boolean isFound = false;
@@ -90,8 +91,8 @@ public class Anime47Crawler {
                         isStatus = false;
                         isStart = false;
 
-                        Anime anime = new Anime(name, image, link, status, commentNum, viewNum);
-                        animes.add(anime);
+                        MovieEntity movieEntity = new MovieEntity(name,link,status,commentNum,viewNum,image);
+                        movieEntities.add(movieEntity);
                     }
                 }
             }
@@ -105,6 +106,6 @@ public class Anime47Crawler {
             }
         }
 
-        return animes;
+        return movieEntities;
     }
 }

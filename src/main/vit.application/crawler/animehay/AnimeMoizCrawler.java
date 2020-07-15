@@ -5,7 +5,7 @@ import constance.WebConstance;
 import crawler.helper.CrawlingHelper;
 import crawler.helper.ParsingResult;
 import lombok.SneakyThrows;
-import model.AnimeEntity;
+import model.phimmoiz.AnimeEntity;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventReader;

@@ -3,9 +3,36 @@
 
     <persistence-unit name="NewPersistenceUnit">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-        <class>model.AnimeEntity</class>
-        <class>model.GenresEntity</class>
-        <class>model.ActorEntity</class>
+        <class>model.phimmoiz.AnimeEntity</class>
+        <class>model.phimmoiz.GenresEntity</class>
+        <class>model.phimmoiz.ActorEntity</class>
+        <class>model.anime47.CategoryEntity</class>
+        <class>model.anime47.MovieEntity</class>
+        <class>model.anime47.MovieDetailedEntity</class>
+        <properties>
+            <property name="eclipselink.jdbc.url" value="jdbc:sqlserver://localhost;database=WibuLover"/>
+            <property name="eclipselink.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+            <property name="eclipselink.jdbc.user" value="intellij"/>
+            <property name="eclipselink.jdbc.password" value="123123"/>
+        </properties>
+    </persistence-unit>
+    <persistence-unit name="WibuLover">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <class>model.anime47.CategoryEntity</class>
+        <class>model.anime47.MovieEntity</class>
+        <class>model.anime47.MovieDetailedEntity</class>
+        <properties>
+            <property name="eclipselink.jdbc.url" value="jdbc:sqlserver://localhost;database=WibuLover"/>
+            <property name="eclipselink.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+            <property name="eclipselink.jdbc.user" value="intellij"/>
+            <property name="eclipselink.jdbc.password" value="123123"/>
+        </properties>
+    </persistence-unit>
+    <persistence-unit name="Wibu">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <class>model.anime47.CategoryEntity</class>
+        <class>model.anime47.MovieEntity</class>
+        <class>model.anime47.MovieDetailedEntity</class>
         <properties>
             <property name="eclipselink.jdbc.url" value="jdbc:sqlserver://localhost;database=WibuLover"/>
             <property name="eclipselink.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
